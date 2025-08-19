@@ -369,13 +369,10 @@
             }
         }
 
-        // Volume control with SVGs
-        const volumeBtn = document.getElementById('volumeBtn');
-        const volumeIcon = document.getElementById('volumeIcon');
-
-        volumeBtn.addEventListener('click', () => {
+        // Volume control
+        document.getElementById('volumeBtn').addEventListener('click', () => {
             audioPlayer.muted = !audioPlayer.muted;
-            volumeIcon.src = audioPlayer.muted ? 'images/mute.svg' : 'images/volume.svg';
+            document.getElementById('volumeBtn').textContent = audioPlayer.muted ? '🔇' : '🔊';
         });
 
         // Play current track
