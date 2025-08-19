@@ -760,16 +760,22 @@
         }
 
         .player-thumbnail {
-            width: 55px;
-            height: 55px;
-            background: linear-gradient(45deg, #1a1a1a, #2a2a2a);
+            width: 60px;
+            height: 60px;
+            border-radius: 8px;
+            overflow: hidden;
+            flex-shrink: 0;
+            background: #111; /* fallback */
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.4rem;
-            border-radius: 8px;
-            flex-shrink: 0;
         }
+
+        .player-thumbnail img.player-art {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+}
 
         .player-details {
             min-width: 0;

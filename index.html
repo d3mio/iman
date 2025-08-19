@@ -32,7 +32,7 @@
     <section id="home" class="hero">
 
         <video autoplay muted loop id="heroVideo" class="hero-background-video">
-            <source src="images/backvid.mp4" type="video/mp4">
+            <source src="images/Vids/backvid.mp4" type="video/mp4">
             Your browser does not support the video tag.
         </video>
 
@@ -312,32 +312,38 @@
                 title: 'Hathpethi Mal',
                 artist: 'Iman Fernando',
                 symbol: '♪',
+                image: 'images/album_arts/Hathpethi_Mal.jpg'
             },
             'Paalu_Yaame': {
                 src: 'music/Paalu_yaame.mp3',
                 title: 'Paalu Yaame',
                 artist: 'Iman Fernando',
                 symbol: '☀',
+                image: 'images/album_arts/Paalu_Yaame.jpeg'
             },
             'Hangannada_Adare': {
                 src: 'music/Hangannada_adare.mp3',
                 title: 'Hangannada Adare',
                 artist: 'Iman Fernando',
                 symbol: '∿',
+                image: 'images/album_arts/Hangannada_Adare.jpeg'
             },
             'Ralu_Nethu': {
                 src: 'music/Ralu_nethu.mp3',
                 title: 'Ralu Nethu',
                 artist: 'Iman Fernando',
                 symbol: '◆',
+                image: 'images/album_arts/Ralu_Nethu.jpg'
             },
             'Chaarikawak': {
                 src: 'music/Charikawak.mp3',
                 title: 'Charikawak',
                 artist: 'Iman',
-                symbol: '◆',
+                symbol: '◦',
+                image: 'images/album_arts/Charikawak.jpg'
             },
         };
+
 
 
         let currentTrack = 'midnight-dreams'; // Default track
@@ -349,7 +355,7 @@
             audioPlayer.src = track.src;
             playerTitle.textContent = track.title;
             playerArtist.textContent = track.artist;
-            playerThumbnail.textContent = track.symbol;
+            playerThumbnail.innerHTML = `<img src="${track.image}" alt="${track.title}" class="player-art">`;
             heroTrackTitle.textContent = track.title;
             heroTrackInfo.classList.add('visible');
         }
@@ -404,7 +410,7 @@
             audioPlayer.src = track.src;
             playerTitle.textContent = track.title;
             playerArtist.textContent = track.artist;
-            playerThumbnail.textContent = track.symbol;
+            playerThumbnail.innerHTML = `<img src="${track.image}" alt="${track.title}" class="player-art">`;
             heroTrackTitle.textContent = track.title;
             
             // Show global player with slide up animation
