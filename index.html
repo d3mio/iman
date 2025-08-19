@@ -258,7 +258,7 @@
             <div class="player-info">
                 <div class="player-thumbnail" id="playerThumbnail">♪</div>
                 <div class="player-details">
-                    <h4 id="playerTitle">Midnight Dreams</h4>
+                    <h4 id="playerTitle">Hathpethi Mal</h4>
                     <p id="playerArtist">Iman Fernando</p>
                 </div>
             </div>
@@ -346,7 +346,7 @@
 
 
 
-        let currentTrack = 'midnight-dreams'; // Default track
+        let currentTrack = 'Hathpethi_Mal'; // Default track
         let isPlaying = false;
 
         // Initialize default track
@@ -368,6 +368,15 @@
                 pauseCurrentTrack();
             }
         }
+
+        // Volume control with SVGs
+        const volumeBtn = document.getElementById('volumeBtn');
+        const volumeIcon = document.getElementById('volumeIcon');
+
+        volumeBtn.addEventListener('click', () => {
+            audioPlayer.muted = !audioPlayer.muted;
+            volumeIcon.src = audioPlayer.muted ? 'images/mute.svg' : 'images/volume.svg';
+        });
 
         // Play current track
         function playCurrentTrack() {
