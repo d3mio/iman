@@ -360,31 +360,260 @@ nav {
     letter-spacing: 1px;
 }
 
-.track-links {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 8px;
-    flex-wrap: wrap;
-}
-
+/* Modern Responsive Track Links */
 .track-link {
-    flex: 1;
-    padding: 12px 8px;
-    border: 1px solid rgba(255, 255, 255, 0.3);
+    width: clamp(40px, 8vw, 50px);
+    height: clamp(40px, 8vw, 50px);
+    padding: clamp(8px, 2vw, 12px);
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
     color: #ffffff;
     text-decoration: none;
-    font-size: 0.75rem;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    text-align: center;
-    transition: all 0.3s ease;
-    min-width: 70px;
+    transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: clamp(12px, 3vw, 16px);
+    position: relative;
+    overflow: hidden;
+    box-shadow: 
+        0 8px 32px rgba(0, 0, 0, 0.12),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.track-link::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 255, 255, 0.1),
+        transparent
+    );
+    transition: left 0.6s ease;
+}
+
+.track-link:hover::before {
+    left: 100%;
 }
 
 .track-link:hover {
-    background: #ffffff;
+    background: rgba(255, 255, 255, 0.95);
     color: #000000;
+    transform: translateY(-4px) scale(1.05);
+    border-color: rgba(255, 255, 255, 0.3);
+    box-shadow: 
+        0 20px 40px rgba(0, 0, 0, 0.15),
+        0 0 0 1px rgba(255, 255, 255, 0.1),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.platform-icon {
+    width: clamp(16px, 4vw, 24px);
+    height: clamp(16px, 4vw, 24px);
+    fill: currentColor;
+    transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+}
+
+.track-link:hover .platform-icon {
+    transform: scale(1.15) rotate(5deg);
+    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.15));
+}
+
+/* Modern gradient overlay for each platform */
+.track-link[href*="spotify"]:hover {
+    background: linear-gradient(135deg, #1DB954 0%, #1ed760 100%);
+    color: #ffffff;
+}
+
+.track-link[href*="apple"]:hover {
+    background: linear-gradient(135deg, #FA233B 0%, #FB5C74 100%);
+    color: #ffffff;
+}
+
+.track-link[href*="youtube"]:hover {
+    background: linear-gradient(135deg, #FF0000 0%, #FF4444 100%);
+    color: #ffffff;
+}
+
+/* Updated track-links layout */
+.track-links {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: clamp(12px, 3vw, 20px);
+    flex-wrap: nowrap;
+    margin-top: 15px;
+}
+
+/* Responsive adjustments for different screen sizes */
+@media (max-width: 768px) {
+    .track-links {
+        gap: clamp(10px, 3vw, 15px);
+        justify-content: center;
+        flex-wrap: nowrap;
+    }
+    
+    .track-link {
+        min-width: 42px;
+        min-height: 42px;
+        backdrop-filter: blur(15px);
+        -webkit-backdrop-filter: blur(15px);
+    }
+    
+    .platform-icon {
+        min-width: 18px;
+        min-height: 18px;
+    }
+    
+    .track-link:hover {
+        transform: translateY(-2px) scale(1.03);
+    }
+}
+
+@media (max-width: 480px) {
+    .track-links {
+        gap: clamp(8px, 2vw, 12px);
+        flex-wrap: nowrap;
+        justify-content: space-evenly;
+        padding: 0 10px;
+    }
+    
+    .track-link {
+        width: clamp(36px, 8vw, 40px);
+        height: clamp(36px, 8vw, 40px);
+        padding: 6px;
+        border-radius: 12px;
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        flex-shrink: 0;
+    }
+    
+    .platform-icon {
+        width: clamp(16px, 4vw, 18px);
+        height: clamp(16px, 4vw, 18px);
+    }
+    
+    /* Simplified hover effects for mobile */
+    .track-link:hover {
+        transform: translateY(-1px) scale(1.02);
+        box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+    }
+    
+    .track-link:hover .platform-icon {
+        transform: scale(1.1);
+    }
+}
+
+@media (max-width: 320px) {
+    .track-links {
+        gap: clamp(6px, 2vw, 10px);
+        justify-content: space-evenly;
+        padding: 0 5px;
+    }
+    
+    .track-link {
+        width: clamp(32px, 7vw, 36px);
+        height: clamp(32px, 7vw, 36px);
+        padding: 5px;
+        border-radius: 10px;
+        flex-shrink: 0;
+    }
+    
+    .platform-icon {
+        width: clamp(14px, 3.5vw, 16px);
+        height: clamp(14px, 3.5vw, 16px);
+    }
+}
+
+/* Large screens with enhanced effects */
+@media (min-width: 1200px) {
+    .track-link {
+        width: 55px;
+        height: 55px;
+        padding: 14px;
+        border-radius: 18px;
+        backdrop-filter: blur(25px);
+        -webkit-backdrop-filter: blur(25px);
+    }
+    
+    .track-link:hover {
+        transform: translateY(-6px) scale(1.08);
+        box-shadow: 
+            0 25px 50px rgba(0, 0, 0, 0.2),
+            0 0 0 1px rgba(255, 255, 255, 0.1),
+            inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    }
+    
+    .platform-icon {
+        width: 26px;
+        height: 26px;
+    }
+    
+    .track-link:hover .platform-icon {
+        transform: scale(1.2) rotate(8deg);
+    }
+}
+
+/* Touch device optimizations with modern styling */
+@media (hover: none) and (pointer: coarse) {
+    .track-link {
+        min-height: 44px;
+        min-width: 44px;
+        backdrop-filter: blur(15px);
+        -webkit-backdrop-filter: blur(15px);
+    }
+    
+    .track-link:hover {
+        transform: none;
+    }
+    
+    .track-link:active {
+        transform: scale(0.95);
+        background: rgba(255, 255, 255, 0.15);
+        box-shadow: 
+            0 4px 16px rgba(0, 0, 0, 0.1),
+            inset 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    
+    .track-link:active .platform-icon {
+        transform: scale(0.9);
+    }
+}
+
+/* Dark mode enhancements */
+@media (prefers-color-scheme: dark) {
+    .track-link {
+        background: rgba(255, 255, 255, 0.03);
+        border-color: rgba(255, 255, 255, 0.08);
+        box-shadow: 
+            0 8px 32px rgba(0, 0, 0, 0.2),
+            inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    }
+}
+
+/* Reduced motion preferences */
+@media (prefers-reduced-motion: reduce) {
+    .track-link,
+    .platform-icon,
+    .track-link::before {
+        transition: none;
+    }
+    
+    .track-link:hover {
+        transform: none;
+    }
+    
+    .track-link:hover .platform-icon {
+        transform: scale(1.05);
+    }
 }
 
 /* About Section */
