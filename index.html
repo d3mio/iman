@@ -56,6 +56,7 @@
                     </svg>
                 </button>
 
+
                 <div class="hero-track-info" id="heroTrackInfo">
                     <div class="hero-track-title" id="heroTrackTitle">Midnight Dreams</div>
                     <div class="hero-track-artist">Iman Fernando</div>
@@ -309,7 +310,7 @@
 
     <script>
         // Music Player Elements
-        
+
         // iOS / Safari: prevent AirPlay or remote playback
         audioPlayer.setAttribute("x-webkit-airplay", "deny");
         audioPlayer.setAttribute("controlsList", "noremoteplayback");
@@ -398,7 +399,8 @@
         function playCurrentTrack() {
             audioPlayer.play().then(() => {
                 isPlaying = true;
-                heroPlayBtn.textContent = '⏸';
+                heroPlayIcon.style.display = 'none';
+                heroPauseIcon.style.display = 'block';
                 heroPlayBtn.classList.add('playing');
                 playIcon.style.display = 'none';
                 pauseIcon.style.display = 'block';
@@ -406,9 +408,9 @@
                 updateAllPlayButtons();
             }).catch(e => {
                 console.log('Playback failed:', e);
-                // Fallback for demo
                 isPlaying = true;
-                heroPlayBtn.textContent = '⏸';
+                heroPlayIcon.style.display = 'none';
+                heroPauseIcon.style.display = 'block';
                 heroPlayBtn.classList.add('playing');
                 playIcon.style.display = 'none';
                 pauseIcon.style.display = 'block';
@@ -422,12 +424,14 @@
         function pauseCurrentTrack() {
             audioPlayer.pause();
             isPlaying = false;
-            heroPlayBtn.textContent = '▶';
+            heroPlayIcon.style.display = 'block';
+            heroPauseIcon.style.display = 'none';
             heroPlayBtn.classList.remove('playing');
             playIcon.style.display = 'block';
             pauseIcon.style.display = 'none';
             updateAllPlayButtons();
         }
+
 
         // Play specific track
         function playTrack(trackId, title, symbol) {
