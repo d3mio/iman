@@ -48,6 +48,20 @@
                 symbol: '◆',
                 image: 'images/album_arts/Ralu_Nethu.jpg'
             },
+            'Ape_kathawa': {
+                src: 'music/Ape_kathawa.mp3',
+                title: 'Ape Kathawa',
+                artist: 'Iman Fernando',
+                symbol: '◊',
+                image: 'images/album_arts/Apekathawa.jpg'
+            },
+            'Aley_Ma': {
+                src: 'music/Aley_Ma.mp3',
+                title: 'Aley Ma',
+                artist: 'Iman Fernando',
+                symbol: '◊',
+                image: 'images/album_arts/Aley_Ma.jpg'
+            },
             'Chaarikawak': {
                 src: 'music/Charikawak.mp3',
                 title: 'Charikawak',
