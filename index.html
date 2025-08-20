@@ -3,9 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Iman Fernando Official Site</title>
+    <title>Iman Fernando</title>
     <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 
 <body>
@@ -17,10 +16,10 @@
             <div class="logo">IMAN FERNANDO</div>
             <ul class="nav-links" id="nav-links">
                 <li><a href="#home">Home</a></li>
-                <li><a href="#about">About</a></li>
                 <li><a href="#music">Music</a></li>
-                <li><a href="#collaborations">Collaborations</a></li>
+                <li><a href="#about">About</a></li>
                 <li><a href="#tour">Live</a></li>
+                <li><a href="#collaborations">Collaborations</a></li>
                 <li><a href="#contact">Contact</a></li>
             </ul>
             <div class="mobile-menu" onclick="toggleMenu()">
@@ -41,14 +40,8 @@
             <h1>IMAN</h1>
             <p>Singer • Artist • Performer</p>
             <div class="hero-play-container">
-                <button class="control-btn play-btn" id="playPauseBtn">
-                    <svg viewBox="0 0 24 24" id="playIcon">
-                        <path d="M8 5v14l11-7z"/>
-                    </svg>
-                    <svg viewBox="0 0 24 24" id="pauseIcon" style="display: none;">
-                        <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>
-                    </svg>
-                    <!-- <i id="playPauseIcon" class="fa fa-play"></i> -->
+                <button class="hero-play-btn" id="heroPlayBtn" onclick="toggleHeroPlayback()">
+                    ▶
                 </button>
                 <div class="hero-track-info" id="heroTrackInfo">
                     <div class="hero-track-title" id="heroTrackTitle">Midnight Dreams</div>
@@ -110,7 +103,7 @@
                         <button class="track-play-btn" onclick="playTrack('Paalu_Yaame', '☀')">▶</button>
                     </div>
                     <div class="track-info">
-                        <h3 class="track-title">Paalu Yaame <br> (මා සොළුරි)</h3>
+                        <h3 class="track-title">Paalu Yaame <br> (මා සොදුරි​ය)</h3>
                         <div class="track-meta">Single • 2023</div>
                         <div class="track-links">
                             <a href="https://open.spotify.com/track/42e6q2wCvs3awgT5bHPlZz" class="track-link" target="_blank">Spotify</a>
@@ -408,31 +401,15 @@
             });
         }
 
-        function playCurrentTrack() {
-            audioPlayer.play().then(() => {
-                isPlaying = true;
-                playIcon.style.display = 'none';   // hide play
-                pauseIcon.style.display = 'block'; // show pause
-                globalPlayer.classList.add('active');
-                updateAllPlayButtons();
-            }).catch(e => {
-                console.log('Playback failed:', e);
-            });
-        }
+        // Pause current track
         function pauseCurrentTrack() {
             audioPlayer.pause();
             isPlaying = false;
-            playIcon.style.display = 'block';   // show play
-            pauseIcon.style.display = 'none';   // hide pause
+            heroPlayBtn.textContent = '▶';
+            heroPlayBtn.classList.remove('playing');
+            playIcon.style.display = 'block';
+            pauseIcon.style.display = 'none';
             updateAllPlayButtons();
-        }
-
-        function togglePlayPause() {
-            if (!isPlaying) {
-                playCurrentTrack();
-            } else {
-                pauseCurrentTrack();
-            }
         }
 
         // Play specific track
