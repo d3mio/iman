@@ -9,7 +9,15 @@
 
 <body>
     <!-- Audio element for music playback -->
-    <audio id="audioPlayer" preload="metadata"></audio>
+    <audio id="audioPlayer" 
+        preload="metadata" 
+        playsinline 
+        webkit-playsinline 
+        x-webkit-airplay="deny" 
+        x5-playsinline 
+        controlslist="nodownload nofullscreen noremoteplayback">
+    </audio>
+
 
     <nav>
         <div class="nav-container">
@@ -31,9 +39,8 @@
     </nav>
 
     <section id="home" class="hero">
-        <video autoplay muted loop id="heroVideo" class="hero-background-video">
+        <video autoplay muted loop id="heroVideo" class="hero-background-video" playsinline webkit-playsinline x-webkit-airplay="deny" x5-playsinline>
             <source src="images/Vids/backvid.mp4" type="video/mp4">
-            Your browser does not support the video tag.
         </video>
 
         <div class="hero-content">
@@ -302,7 +309,11 @@
 
     <script>
         // Music Player Elements
-        const audioPlayer = document.getElementById('audioPlayer');
+        
+        // iOS / Safari: prevent AirPlay or remote playback
+        audioPlayer.setAttribute("x-webkit-airplay", "deny");
+        audioPlayer.setAttribute("controlsList", "noremoteplayback");
+        audioPlayer.disableRemotePlayback = true;
         const globalPlayer = document.getElementById('globalPlayer');
         const playPauseBtn = document.getElementById('playPauseBtn');
         const playIcon = document.getElementById('playIcon');
