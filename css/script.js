@@ -60,7 +60,7 @@
                 title: 'Aley Ma',
                 artist: 'Iman Fernando',
                 symbol: '◊',
-                image: 'images/album_arts/Aley_Ma.jpg'
+                image: 'images/album_arts/Aley_ma.jpg'
             },
             'Chaarikawak': {
                 src: 'music/Charikawak.mp3',
