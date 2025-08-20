@@ -68,10 +68,9 @@
             text-align: center;
             position: relative;
             overflow: hidden;
-            background: none; /* remove original gradient/background so video shows */
+            background: none;
         }
 
-        /* Background Video */
         .hero-background-video {
             position: absolute;
             top: 0;
@@ -79,10 +78,9 @@
             width: 100%;
             height: 100%;
             object-fit: cover;
-            z-index: -1; /* Keep the video behind everything */
+            z-index: -1;
         }
 
-        /* Optional overlay for better readability */
         .hero::after {
             content: '';
             position: absolute;
@@ -91,13 +89,12 @@
             width: 100%;
             height: 100%;
             background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.6));
-            z-index: 0; /* behind hero content */
+            z-index: 0;
         }
 
-        /* Hero Content */
         .hero-content {
-            position: relative; /* make z-index work */
-            z-index: 1; /* bring content in front of overlay */
+            position: relative;
+            z-index: 1;
         }
 
         .hero-content h1 {
@@ -117,7 +114,6 @@
             margin-bottom: 40px;
         }
 
-        /* Hero Play Button */
         .hero-play-container {
             display: flex;
             flex-direction: column;
@@ -125,7 +121,7 @@
             gap: 15px;
             margin-top: 40px;
             position: relative;
-            z-index: 1; /* bring in front */
+            z-index: 1;
         }
 
         .hero-play-btn {
@@ -183,14 +179,13 @@
             100% { box-shadow: 0 8px 32px rgba(255, 107, 53, 0.3); }
         }
 
-        /* Hero Track Info */
         .hero-track-info {
             opacity: 0;
             transform: translateY(10px);
             transition: all 0.3s ease;
             text-align: center;
             position: relative;
-            z-index: 1; /* bring in front */
+            z-index: 1;
         }
 
         .hero-track-info.visible {
@@ -212,8 +207,6 @@
             letter-spacing: 1px;
             text-transform: uppercase;
         }
-
-
 
         /* Main Content */
         .container {
@@ -353,15 +346,10 @@
             color: #000000;
         }
 
-
-
-
-
-
         /* About Section */
         .flagship-showcase {
             padding: 120px 0;
-            background: #0a0a0a; /* Dark background */
+            background: #0a0a0a;
             position: relative;
         }
 
@@ -413,7 +401,7 @@
             height: 100%;
             overflow: hidden;
             border-radius: 8px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.6); /* darker shadow */
+            box-shadow: 0 20px 60px rgba(0,0,0,0.6);
         }
 
         .product-frame img {
@@ -435,27 +423,6 @@
             bottom: 0;
             background: linear-gradient(45deg, rgba(255,255,255,0.02) 0%, transparent 50%);
             pointer-events: none;
-        }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            .showcase-content {
-                grid-template-columns: 1fr;
-                gap: 40px;
-                text-align: center;
-            }
-
-            .showcase-text {
-                padding: 0 20px;
-            }
-
-            .showcase-text h2 {
-                font-size: 2.5rem;
-            }
-
-            .showcase-image {
-                height: 400px;
-            }
         }
 
         /* Tour Section */
@@ -517,60 +484,11 @@
             color: #000000;
         }
 
-        /* Collaborations Section */
-        .collab-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 40px;
-        }
-
-        .collab-item {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 40px;
-            transition: all 0.3s ease;
-        }
-
-        .collab-item:hover {
-            background: rgba(255, 255, 255, 0.06);
-            transform: translateY(-5px);
-        }
-
-        .collab-title {
-            font-size: 1.2rem;
-            font-weight: 300;
-            margin-bottom: 10px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .collab-artist {
-            font-size: 0.9rem;
-            opacity: 0.6;
-            margin-bottom: 20px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .collab-description {
-            font-size: 0.95rem;
-            opacity: 0.8;
-            line-height: 1.6;
-            margin-bottom: 20px;
-        }
-
-        .collab-meta {
-            font-size: 0.8rem;
-            opacity: 0.5;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
         /* Contact Section */
         .contact {
             text-align: center;
             background: rgba(255, 255, 255, 0.02);
-            padding: 40px 20px; /* added padding for mobile */
+            padding: 40px 20px;
         }
 
         .social-links {
@@ -578,7 +496,7 @@
             justify-content: center;
             gap: 40px;
             margin-top: 40px;
-            flex-wrap: wrap; /* allows wrapping on small screens */
+            flex-wrap: wrap;
         }
 
         .social-link {
@@ -593,21 +511,6 @@
         .social-link:hover {
             color: #ff6b35;
         }
-
-        /* Mobile responsiveness */
-        @media (max-width: 600px) {
-            .social-links {
-                gap: 20px; /* smaller gap on mobile */
-                flex-direction: column; /* stack links vertically if needed */
-                align-items: center;
-                margin-top: 20px;
-            }
-
-            .social-link {
-                font-size: 0.8rem; /* slightly smaller font on mobile */
-            }
-        }
-
 
         /* Footer */
         footer {
@@ -637,67 +540,6 @@
             height: 2px;
             background: #ffffff;
             transition: all 0.3s ease;
-        }
-
-        @media (max-width: 768px) {
-            .nav-links {
-                display: none;
-                position: absolute;
-                top: 100%;
-                left: 0;
-                right: 0;
-                background: rgba(0, 0, 0, 0.95);
-                flex-direction: column;
-                padding: 20px 40px;
-                gap: 20px;
-            }
-
-            .nav-links.active {
-                display: flex;
-            }
-
-            .mobile-menu {
-                display: flex;
-            }
-
-            nav {
-                padding: 20px;
-            }
-
-            .container {
-                padding: 0 20px;
-            }
-
-            .hero-content h1 {
-                font-size: 3rem;
-            }
-
-            .hero-play-btn {
-                width: 80px;
-                height: 80px;
-                font-size: 2rem;
-            }
-
-            .music-grid,
-            .collab-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .tour-item {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 10px;
-            }
-
-            .track-links {
-                flex-direction: column;
-                gap: 10px;
-            }
-            
-            .track-link {
-                flex: none;
-                width: 100%;
-            }
         }
 
         /* Fade in animations */
@@ -741,6 +583,20 @@
             100% { transform: translateY(200%); opacity: 0; }
         }
 
+        /* Album Art */
+        .album-art {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 4px;
+            filter: brightness(0.8);
+            transition: filter 0.3s ease;
+        }
+
+        .track:hover .album-art {
+            filter: brightness(1);
+        }
+
         /* Global Music Player */
         .global-player {
             position: fixed;
@@ -782,7 +638,7 @@
             border-radius: 8px;
             overflow: hidden;
             flex-shrink: 0;
-            background: #111; /* fallback */
+            background: #111;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -792,7 +648,7 @@
             width: 100%;
             height: 100%;
             object-fit: cover;
-}
+        }
 
         .player-details {
             min-width: 0;
@@ -833,7 +689,6 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.2rem;
             transition: all 0.3s ease;
             border-radius: 50%;
         }
@@ -842,10 +697,15 @@
             background: rgba(255, 255, 255, 0.1);
         }
 
+        .control-btn svg {
+            width: 20px;
+            height: 20px;
+            fill: currentColor;
+        }
+
         .play-btn {
             background: rgba(255, 255, 255, 0.9) !important;
             color: #000000 !important;
-            font-size: 1rem;
             width: 48px;
             height: 48px;
         }
@@ -853,6 +713,11 @@
         .play-btn:hover {
             background: #ffffff !important;
             transform: scale(1.05);
+        }
+
+        .play-btn svg {
+            width: 18px;
+            height: 18px;
         }
 
         .progress-container {
@@ -888,286 +753,192 @@
             font-weight: 300;
         }
 
-
-        /* album art */
-        .album-art {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            border-radius: 4px;
-            filter: brightness(0.8);
-            transition: filter 0.3s ease;
-        }
-
-        .track:hover .album-art {
-            filter: brightness(1);
-        }
-
-
-        /* Mobile adjustments */
         @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: rgba(0, 0, 0, 0.95);
+                flex-direction: column;
+                padding: 20px 40px;
+                gap: 20px;
+            }
+
+            .nav-links.active {
+                display: flex;
+            }
+
+            .mobile-menu {
+                display: flex;
+            }
+
+            nav {
+                padding: 20px;
+            }
+
+            .container {
+                padding: 0 20px;
+            }
+
+            .hero-content h1 {
+                font-size: 3rem;
+            }
+
+            .hero-play-btn {
+                width: 80px;
+                height: 80px;
+                font-size: 2rem;
+            }
+
+            .music-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .tour-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+
+            .track-links {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .track-link {
+                flex: none;
+                width: 100%;
+            }
+
+            .showcase-content {
+                grid-template-columns: 1fr;
+                gap: 40px;
+                text-align: center;
+            }
+
+            .showcase-text {
+                padding: 0 20px;
+            }
+
+            .showcase-text h2 {
+                font-size: 2.5rem;
+            }
+
+            .showcase-image {
+                height: 400px;
+            }
+
+            .social-links {
+                gap: 20px;
+                flex-direction: column;
+                align-items: center;
+                margin-top: 20px;
+            }
+
+            .social-link {
+                font-size: 0.8rem;
+            }
+
+            /* Global Player Mobile */
             .global-player {
-                padding: 15px 20px;
+                padding: 15px 15px;
             }
-            
+
             .player-content {
-                gap: 15px;
+                gap: 12px;
+                flex-wrap: nowrap;
             }
-            
+
             .player-info {
-                gap: 15px;
+                gap: 12px;
+                flex: 1;
+                min-width: 0;
             }
-            
+
             .player-thumbnail {
                 width: 45px;
                 height: 45px;
-                font-size: 1.2rem;
             }
-            
+
             .player-details h4 {
                 font-size: 0.9rem;
             }
-            
+
             .player-details p {
                 font-size: 0.75rem;
             }
-            
+
             .progress-container {
-                max-width: 250px;
-                margin: 0 10px;
+                max-width: 170px;
+                margin: 0 12px;
             }
-            
+
             .control-btn {
-                width: 40px;
-                height: 40px;
+                width: 38px;
+                height: 38px;
             }
-            
+
+            .control-btn svg {
+                width: 16px;
+                height: 16px;
+            }
+
             .play-btn {
-                width: 44px;
-                height: 44px;
+                width: 42px;
+                height: 42px;
+            }
+
+            .play-btn svg {
+                width: 14px;
+                height: 14px;
             }
         }
 
         @media (max-width: 480px) {
-            .progress-container {
-                max-width: 180px;
+            .global-player {
+                padding: 12px 10px;
             }
-            
+
             .player-content {
-                gap: 10px;
-            }
-        }
-
-        /* Extra Mobile Adjustments */
-        @media (max-width: 600px) {
-            /* Navigation */
-            nav {
-                padding: 15px 20px;
-            }
-
-            .nav-links {
-                padding: 15px 20px;
-                gap: 15px;
-            }
-
-            .logo {
-                font-size: 1.3rem;
-            }
-
-            /* Hero Section */
-            .hero-content h1 {
-                font-size: 2.2rem;
-                line-height: 2.5rem;
-            }
-
-            .hero-content p {
-                font-size: 1rem;
-                line-height: 1.4rem;
-            }
-
-            .hero-play-btn {
-                width: 70px;
-                height: 70px;
-                font-size: 1.8rem;
-            }
-
-            /* Track Cards */
-            .music-grid {
-                gap: 25px;
-            }
-
-            .track-image {
-                height: 200px;
-                font-size: 2rem;
-            }
-
-            .track-play-btn {
-                width: 50px;
-                height: 50px;
-                font-size: 1.2rem;
-            }
-
-            .track-info {
-                padding: 20px;
-            }
-
-            .track-title {
-                font-size: 1.1rem;
-            }
-
-            .track-meta {
-                font-size: 0.8rem;
-            }
-
-            .track-description {
-                font-size: 0.85rem;
-            }
-
-            .track-links {
                 gap: 8px;
             }
 
-            .track-link {
-                font-size: 0.75rem;
-                padding: 10px 6px;
+            .player-thumbnail {
+                width: 40px;
+                height: 40px;
             }
 
-            /* Showcase Section */
-            .showcase-text h2 {
-                font-size: 2rem;
-            }
-
-            .showcase-text p {
-                font-size: 1rem;
-            }
-
-            .showcase-image {
-                height: 300px;
-            }
-
-            /* Collab Section */
-            .collab-grid {
-                gap: 25px;
-            }
-
-            .collab-item {
-                padding: 30px;
-            }
-
-            .collab-title {
-                font-size: 1rem;
-            }
-
-            .collab-artist {
+            .player-details h4 {
                 font-size: 0.8rem;
             }
 
-            .collab-description {
-                font-size: 0.85rem;
+            .player-details p {
+                font-size: 0.7rem;
             }
 
-            /* Tour Section */
-            .tour-item {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 8px;
-                padding: 15px 0;
+            .progress-container {
+                max-width: 140px;
             }
 
-            .tour-date,
-            .tour-location,
-            .tour-venue {
-                font-size: 0.8rem;
+            .control-btn {
+                width: 34px;
+                height: 34px;
             }
 
-            .tour-button {
-                font-size: 0.75rem;
-                padding: 8px 15px;
+            .control-btn svg {
+                width: 14px;
+                height: 14px;
             }
 
-            /* Footer */
-            .footer-content {
-                font-size: 0.75rem;
+            .play-btn {
+                width: 38px;
+                height: 38px;
+            }
+
+            .play-btn svg {
+                width: 12px;
+                height: 12px;
             }
         }
-
-
-
-
-        /* Global Player - Mobile Adjustments (taller) */
-@media (max-width: 768px) {
-    .global-player {
-        padding: 15px 15px; /* increased from 10px */
-    }
-
-    .player-content {
-        gap: 12px;
-        flex-wrap: nowrap;
-    }
-
-    .player-info {
-        gap: 12px;
-        flex: 1;
-        min-width: 0;
-    }
-
-    .player-thumbnail {
-        width: 45px;  /* slightly bigger */
-        height: 45px;
-    }
-
-    .player-details h4 {
-        font-size: 0.9rem;
-    }
-
-    .player-details p {
-        font-size: 0.75rem;
-    }
-
-    .progress-container {
-        max-width: 170px; /* slightly wider for more visibility */
-        margin: 0 12px;
-    }
-
-    .control-btn,
-    .play-btn {
-        width: 38px;
-        height: 38px;
-        font-size: 0.95rem;
-    }
-}
-
-@media (max-width: 480px) {
-    .global-player {
-        padding: 12px 10px; /* increased slightly */
-    }
-
-    .player-content {
-        gap: 8px;
-    }
-
-    .player-thumbnail {
-        width: 40px;
-        height: 40px;
-    }
-
-    .player-details h4 {
-        font-size: 0.8rem;
-    }
-
-    .player-details p {
-        font-size: 0.7rem;
-    }
-
-    .progress-container {
-        max-width: 140px;
-    }
-
-    .control-btn,
-    .play-btn {
-        width: 34px;
-        height: 34px;
-        font-size: 0.85rem;
-    }
-}
-
