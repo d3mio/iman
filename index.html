@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Iman Fernando Official Site</title>
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 
 <body>
@@ -40,8 +41,14 @@
             <h1>IMAN</h1>
             <p>Singer • Artist • Performer</p>
             <div class="hero-play-container">
-                <button class="hero-play-btn" id="heroPlayBtn" onclick="toggleHeroPlayback()">
-                    ▶
+                <button class="control-btn play-btn" id="playPauseBtn">
+                    <svg viewBox="0 0 24 24" id="playIcon">
+                        <path d="M8 5v14l11-7z"/>
+                    </svg>
+                    <svg viewBox="0 0 24 24" id="pauseIcon" style="display: none;">
+                        <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>
+                    </svg>
+                    <!-- <i id="playPauseIcon" class="fa fa-play"></i> -->
                 </button>
                 <div class="hero-track-info" id="heroTrackInfo">
                     <div class="hero-track-title" id="heroTrackTitle">Midnight Dreams</div>
@@ -401,15 +408,31 @@
             });
         }
 
-        // Pause current track
+        function playCurrentTrack() {
+            audioPlayer.play().then(() => {
+                isPlaying = true;
+                playIcon.style.display = 'none';   // hide play
+                pauseIcon.style.display = 'block'; // show pause
+                globalPlayer.classList.add('active');
+                updateAllPlayButtons();
+            }).catch(e => {
+                console.log('Playback failed:', e);
+            });
+        }
         function pauseCurrentTrack() {
             audioPlayer.pause();
             isPlaying = false;
-            heroPlayBtn.textContent = '▶';
-            heroPlayBtn.classList.remove('playing');
-            playIcon.style.display = 'block';
-            pauseIcon.style.display = 'none';
+            playIcon.style.display = 'block';   // show play
+            pauseIcon.style.display = 'none';   // hide pause
             updateAllPlayButtons();
+        }
+
+        function togglePlayPause() {
+            if (!isPlaying) {
+                playCurrentTrack();
+            } else {
+                pauseCurrentTrack();
+            }
         }
 
         // Play specific track
