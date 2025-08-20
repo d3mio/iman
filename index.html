@@ -397,35 +397,44 @@
             }
         }
 
-        // Play current track
         function playCurrentTrack() {
-            audioPlayer.play().then(() => {
-                isPlaying = true;
-                updatePlayPauseButtons();
-                if (globalPlayer) globalPlayer.classList.add('active');
-                if (heroPlayBtn) heroPlayBtn.classList.add('playing');
-                updateAllTrackButtons();
-            }).catch(error => {
-                console.log('Audio play failed:', error);
-                // Fallback for demo mode
-                isPlaying = true;
-                updatePlayPauseButtons();
-                if (globalPlayer) globalPlayer.classList.add('active');
-                if (heroPlayBtn) heroPlayBtn.classList.add('playing');
-                simulateProgress();
-                updateAllTrackButtons();
-            });
+        // Clear any existing demo interval
+        if (demoInterval) {
+            clearInterval(demoInterval);
+            demoInterval = null;
         }
-
-        // Pause current track
-        function pauseCurrentTrack() {
-            audioPlayer.pause();
-            isPlaying = false;
+        
+        audioPlayer.play().then(() => {
+            isPlaying = true;
             updatePlayPauseButtons();
-            if (heroPlayBtn) heroPlayBtn.classList.remove('playing');
+            if (globalPlayer) globalPlayer.classList.add('active');
+            if (heroPlayBtn) heroPlayBtn.classList.add('playing');
             updateAllTrackButtons();
-        }
+        }).catch(error => {
+            console.log('Audio play failed:', error);
+            // Fallback for demo mode
+            isPlaying = true;
+            updatePlayPauseButtons();
+            if (globalPlayer) globalPlayer.classList.add('active');
+            if (heroPlayBtn) heroPlayBtn.classList.add('playing');
+            simulateProgress();
+            updateAllTrackButtons();
+        });
+    }
 
+        function pauseCurrentTrack() {
+        // Clear demo interval when pausing
+        if (demoInterval) {
+            clearInterval(demoInterval);
+            demoInterval = null;
+        }
+         
+        audioPlayer.pause();
+        isPlaying = false;
+        updatePlayPauseButtons();
+        if (heroPlayBtn) heroPlayBtn.classList.remove('playing');
+        updateAllTrackButtons();
+}
         // Update play/pause button states
         function updatePlayPauseButtons() {
             const heroPlayIcon = document.getElementById('heroPlayIcon');
@@ -457,32 +466,45 @@
             });
         }
 
-        // Play specific track
         function playTrack(trackId, title, symbol) {
-            const track = tracks[trackId];
-            if (!track) return;
-            
-            // Stop current track if playing
-            if (isPlaying) {
-                pauseCurrentTrack();
-            }
-            
-            currentTrack = trackId;
-            currentTrackIndex = trackKeys.indexOf(trackId);
-            audioPlayer.src = track.src;
-            
-            if (playerTitle) playerTitle.textContent = track.title;
-            if (playerArtist) playerArtist.textContent = track.artist;
-            if (playerThumbnail) {
-                playerThumbnail.innerHTML = `<img src="${track.image}" alt="${track.title}" class="player-art">`;
-            }
-            if (heroTrackTitle) heroTrackTitle.textContent = track.title;
-            
-            if (globalPlayer) globalPlayer.classList.add('active');
-            if (heroTrackInfo) heroTrackInfo.classList.add('visible');
-            
-            playCurrentTrack();
+        const track = tracks[trackId];
+        if (!track) return;
+        
+        // Stop current track if playing and clear any demo intervals
+        if (isPlaying) {
+            pauseCurrentTrack();
         }
+        
+        // Clear any existing demo interval
+        if (demoInterval) {
+            clearInterval(demoInterval);
+            demoInterval = null;
+        }
+        
+        // Reset progress bar
+        demoProgress = 0;
+        if (progressFill) progressFill.style.width = '0%';
+        if (currentTimeSpan) currentTimeSpan.textContent = '0:00';
+        if (totalTimeSpan) totalTimeSpan.textContent = '0:00';
+        
+        currentTrack = trackId;
+        currentTrackIndex = trackKeys.indexOf(trackId);
+        audioPlayer.src = track.src;
+        
+        if (playerTitle) playerTitle.textContent = track.title;
+        if (playerArtist) playerArtist.textContent = track.artist;
+        if (playerThumbnail) {
+            playerThumbnail.innerHTML = `<img src="${track.image}" alt="${track.title}" class="player-art">`;
+        }
+        if (heroTrackTitle) heroTrackTitle.textContent = track.title;
+        
+        if (globalPlayer) globalPlayer.classList.add('active');
+        if (heroTrackInfo) heroTrackInfo.classList.add('visible');
+        
+        playCurrentTrack();
+    }
+
+
 
         // Play/Pause toggle for global player
         function togglePlayPause() {
@@ -510,50 +532,64 @@
             }
         }
 
-        // Simulate progress for demo (when audio files don't load)
         let demoProgress = 0;
         let demoInterval = null;
-        
+        let demoDuration = 222; // 3:42 in seconds
+
         function simulateProgress() {
-            if (demoInterval) clearInterval(demoInterval);
+            // Clear any existing interval
+            if (demoInterval) {
+                clearInterval(demoInterval);
+                demoInterval = null;
+            }
+            
+            // Reset progress
             demoProgress = 0;
-            if (totalTimeSpan) totalTimeSpan.textContent = '3:42';
+            demoDuration = Math.floor(Math.random() * 120) + 180; // Random duration between 3-5 minutes
+            if (totalTimeSpan) totalTimeSpan.textContent = formatTime(demoDuration);
+            if (currentTimeSpan) currentTimeSpan.textContent = '0:00';
+            if (progressFill) progressFill.style.width = '0%';
             
             demoInterval = setInterval(() => {
                 if (isPlaying) {
-                    demoProgress += 0.5;
-                    const progress = (demoProgress / 222) * 100;
+                    demoProgress += 1; // Increment by 1 second
+                    const progress = (demoProgress / demoDuration) * 100;
                     if (progressFill) progressFill.style.width = Math.min(progress, 100) + '%';
                     if (currentTimeSpan) currentTimeSpan.textContent = formatTime(demoProgress);
                     
-                    if (demoProgress >= 222) {
+                    if (demoProgress >= demoDuration) {
                         clearInterval(demoInterval);
+                        demoInterval = null;
                         isPlaying = false;
                         updatePlayPauseButtons();
                         updateAllTrackButtons();
                         if (heroPlayBtn) heroPlayBtn.classList.remove('playing');
+                        
+                        // Auto-play next track
+                        setTimeout(() => {
+                            const nextBtn = document.getElementById('nextBtn');
+                            if (nextBtn) nextBtn.click();
+                        }, 1000);
                     }
                 }
-            }, 500);
+            }, 1000); // Update every second for more realistic timing
         }
 
         // Click to seek in progress bar
-        if (progressBar) {
-            progressBar.addEventListener('click', (e) => {
-                const rect = progressBar.getBoundingClientRect();
-                const percent = (e.clientX - rect.left) / rect.width;
-                
-                if (audioPlayer.duration) {
-                    audioPlayer.currentTime = percent * audioPlayer.duration;
-                } else {
-                    // Demo mode
-                    demoProgress = percent * 222;
-                    const progress = (demoProgress / 222) * 100;
-                    if (progressFill) progressFill.style.width = progress + '%';
-                    if (currentTimeSpan) currentTimeSpan.textContent = formatTime(demoProgress);
-                }
-            });
+        progressBar.addEventListener('click', (e) => {
+        const rect = progressBar.getBoundingClientRect();
+        const percent = (e.clientX - rect.left) / rect.width;
+        
+        if (audioPlayer.duration && !isNaN(audioPlayer.duration)) {
+            audioPlayer.currentTime = percent * audioPlayer.duration;
+        } else {
+            // Demo mode - seek in simulated progress
+            demoProgress = percent * demoDuration;
+            const progress = (demoProgress / demoDuration) * 100;
+            if (progressFill) progressFill.style.width = progress + '%';
+            if (currentTimeSpan) currentTimeSpan.textContent = formatTime(demoProgress);
         }
+    });
 
         // Event listeners
         if (playPauseBtn) playPauseBtn.addEventListener('click', togglePlayPause);
@@ -561,11 +597,23 @@
         audioPlayer.addEventListener('timeupdate', updateProgress);
         audioPlayer.addEventListener('loadedmetadata', updateProgress);
         audioPlayer.addEventListener('ended', () => {
-            isPlaying = false;
-            updatePlayPauseButtons();
-            updateAllTrackButtons();
-            if (heroPlayBtn) heroPlayBtn.classList.remove('playing');
-        });
+        // Clear demo interval on track end
+        if (demoInterval) {
+            clearInterval(demoInterval);
+            demoInterval = null;
+        }
+        
+        isPlaying = false;
+        updatePlayPauseButtons();
+        updateAllTrackButtons();
+        if (heroPlayBtn) heroPlayBtn.classList.remove('playing');
+        
+        // Auto-play next track
+        setTimeout(() => {
+            const nextBtn = document.getElementById('nextBtn');
+            if (nextBtn) nextBtn.click();
+        }, 1000);
+    });
 
         // Previous track
         const prevBtn = document.getElementById('prevBtn');
