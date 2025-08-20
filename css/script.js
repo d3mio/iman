@@ -756,7 +756,7 @@
                 
                 if (globalPlayer) {
                     globalPlayer.addEventListener('mouseenter', function(e) {
-                        this.style.transform = 'translateY(-5px) scale(1.02)';
+                        this.style.transform = 'translateY(0px) scale(1.02)';
                         this.style.boxShadow = '0 20px 40px rgba(0, 0, 0, 0.3), 0 0 30px rgba(255, 107, 107, 0.2)';
                         this.style.background = 'rgba(255, 255, 255, 0.15)';
                         this.style.backdropFilter = 'blur(20px)';
