@@ -522,7 +522,7 @@
         }
 
         // Hovering effects 
-        
+
         // Enhanced hover effects for singer portfolio site
         document.addEventListener('DOMContentLoaded', function() {
             

@@ -870,10 +870,19 @@ footer {
 
     .player-content {
         gap: 15px;
+        flex-direction: column;
+    }
+
+    .player-main {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        width: 100%;
     }
 
     .player-info {
         gap: 12px;
+        flex: 1;
     }
 
     .player-thumbnail {
@@ -889,9 +898,15 @@ footer {
         font-size: 0.75rem;
     }
 
+    .player-controls {
+        gap: 10px;
+        flex-shrink: 0;
+    }
+
     .progress-container {
-        max-width: 200px;
-        margin: 0 15px;
+        width: 100%;
+        margin: 0;
+        order: 1;
     }
 
     .control-btn {
@@ -913,7 +928,6 @@ footer {
         width: 16px;
         height: 16px;
     }
-}
 
 @media (max-width: 480px) {
     .hero-play-btn {
@@ -943,6 +957,7 @@ footer {
     .showcase-image {
         height: 300px;
     }
+}
 
     /* Global Player Small Mobile */
     .global-player {
