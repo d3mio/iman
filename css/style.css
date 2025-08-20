@@ -753,6 +753,76 @@
             font-weight: 300;
         }
 
+        /* Hero play button SVG styling */
+        .hero-play-btn svg {
+            width: 40px;
+            height: 40px;
+            fill: currentColor;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Track play button SVG styling */
+        .track-play-btn svg {
+            width: 24px;
+            height: 24px;
+            fill: currentColor;
+        }
+
+        /* Track image music icon fallback */
+        .track-image .music-icon {
+            width: 60px;
+            height: 60px;
+            fill: rgba(255, 255, 255, 0.4);
+        }
+
+        /* Player thumbnail music icon */
+        .player-thumbnail .music-icon {
+            width: 30px;
+            height: 30px;
+            fill: rgba(255, 255, 255, 0.6);
+        }
+
+        /* Mobile responsive SVG adjustments */
+        @media (max-width: 768px) {
+            .hero-play-btn svg {
+                width: 32px;
+                height: 32px;
+            }
+            
+            .track-play-btn svg {
+                width: 20px;
+                height: 20px;
+            }
+            
+            .track-image .music-icon {
+                width: 50px;
+                height: 50px;
+            }
+            
+            .player-thumbnail .music-icon {
+                width: 25px;
+                height: 25px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero-play-btn svg {
+                width: 28px;
+                height: 28px;
+            }
+            
+            .track-play-btn svg {
+                width: 18px;
+                height: 18px;
+            }
+            
+            .track-image .music-icon {
+                width: 45px;
+                height: 45px;
+            }
+        }
+
         @media (max-width: 768px) {
             .nav-links {
                 display: none;

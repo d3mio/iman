@@ -41,7 +41,12 @@
             <p>Singer • Artist • Performer</p>
             <div class="hero-play-container">
                 <button class="hero-play-btn" id="heroPlayBtn" onclick="toggleHeroPlayback()">
-                    ▶
+                    <svg viewBox="0 0 24 24" id="heroPlayIcon">
+                        <path d="M8 5v14l11-7z"/>
+                    </svg>
+                    <svg viewBox="0 0 24 24" id="heroPauseIcon" style="display: none;">
+                        <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>
+                    </svg>
                 </button>
                 <div class="hero-track-info" id="heroTrackInfo">
                     <div class="hero-track-title" id="heroTrackTitle">Midnight Dreams</div>
@@ -100,10 +105,10 @@
                 <div class="track fade-in">
                     <div class="track-image">
                         <img src="images/album_arts/Paalu_Yaame.jpeg" alt="Paalu Yaame" class="album-art">
-                        <button class="track-play-btn" onclick="playTrack('Paalu_Yaame', '☀')">▶</button>
+                        <button class="track-play-btn" onclick="playTrack('Paalu_Yaame', 'Paalu Yaame', '☀')">▶</button>
                     </div>
                     <div class="track-info">
-                        <h3 class="track-title">Paalu Yaame <br> (මා සොදුරි​ය)</h3>
+                        <h3 class="track-title">Paalu Yaame <br> (මා සොඳුරිය​)</h3>
                         <div class="track-meta">Single • 2023</div>
                         <div class="track-links">
                             <a href="https://open.spotify.com/track/42e6q2wCvs3awgT5bHPlZz" class="track-link" target="_blank">Spotify</a>
@@ -116,7 +121,7 @@
                 <div class="track fade-in">
                     <div class="track-image">
                         <img src="images/album_arts/Hangannada_Adare.jpeg" alt="Hangannada Adare" class="album-art">
-                        <button class="track-play-btn" onclick="playTrack('Hangannada_Adare', '∿')">▶</button>
+                        <button class="track-play-btn" onclick="playTrack('Hangannada_Adare', 'Hangannada Adare', '∿')">▶</button>
                     </div>
                     <div class="track-info">
                         <h3 class="track-title">Hangannada Adare <br>(හංගන්නද ආදරේ)</h3>
@@ -132,7 +137,7 @@
                 <div class="track fade-in">
                     <div class="track-image">
                         <img src="images/album_arts/Ralu_Nethu.jpg" alt="Ralu Nethu" class="album-art">
-                        <button class="track-play-btn" onclick="playTrack('Ralu_Nethu', '◆')">▶</button>
+                        <button class="track-play-btn" onclick="playTrack('Ralu_Nethu', 'Ralu Nethu', '◆')">▶</button>
                     </div>
                     <div class="track-info">
                         <h3 class="track-title">Ralu Nethu <br>(රළු නෙතු)</h3>
@@ -150,12 +155,12 @@
 
     <section id="collaborations" class="section">
         <div class="container">
-            <h2 class="section-title fade-in">Music</h2>
+            <h2 class="section-title fade-in">Collaborations</h2>
             <div class="music-grid">
                 <div class="track fade-in">
                     <div class="track-image">
                         <img src="images/album_arts/Charikawak.jpg" alt="Charikawak" class="album-art">
-                        <button class="track-play-btn" onclick="playTrack('Chaarikawak', '◦')">▶</button>
+                        <button class="track-play-btn" onclick="playTrack('Chaarikawak', 'Charikawak', '◦')">▶</button>
                     </div>
                     <div class="track-info">
                         <h3 class="track-title">Charikawak <br>(චාරිකාවක්)</h3>
@@ -240,10 +245,14 @@
     <div class="global-player" id="globalPlayer">
         <div class="player-content">
             <div class="player-info">
-                <div class="player-thumbnail" id="playerThumbnail">♪</div>
-                <div class="player-details">
-                    <h4 id="playerTitle">Hathpethi Mal</h4>
-                    <p id="playerArtist">Iman Fernando</p>
+                <div class="player-thumbnail" id="playerThumbnail">
+                    <svg class="music-icon" viewBox="0 0 24 24">
+                        <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/>
+                    </svg>
+                </div>
+                <div class="player-text">
+                    <div class="player-title" id="playerTitle">Select a track</div>
+                    <div class="player-artist" id="playerArtist">Iman Fernando</div>
                 </div>
             </div>
             <div class="player-controls">
@@ -348,7 +357,7 @@
             'Chaarikawak': {
                 src: 'music/Charikawak.mp3',
                 title: 'Charikawak',
-                artist: 'Iman',
+                artist: 'Iman Fernando',
                 symbol: '◦',
                 image: 'images/album_arts/Charikawak.jpg'
             },
@@ -356,24 +365,35 @@
 
         let currentTrack = 'Hathpethi_Mal';
         let isPlaying = false;
+        let currentTrackIndex = 0;
+        const trackKeys = Object.keys(tracks);
 
         // Initialize default track
         function initializePlayer() {
             const track = tracks[currentTrack];
             audioPlayer.src = track.src;
-            playerTitle.textContent = track.title;
-            playerArtist.textContent = track.artist;
-            playerThumbnail.innerHTML = `<img src="${track.image}" alt="${track.title}" class="player-art">`;
-            heroTrackTitle.textContent = track.title;
-            heroTrackInfo.classList.add('visible');
+            if (playerTitle) playerTitle.textContent = track.title;
+            if (playerArtist) playerArtist.textContent = track.artist;
+            if (playerThumbnail) {
+                playerThumbnail.innerHTML = `<img src="${track.image}" alt="${track.title}" class="player-art">`;
+            }
+            if (heroTrackTitle) heroTrackTitle.textContent = track.title;
+            if (heroTrackInfo) heroTrackInfo.classList.add('visible');
         }
 
-        // Hero play button toggle
+        // Toggle hero playback
         function toggleHeroPlayback() {
+            const heroPlayIcon = document.getElementById('heroPlayIcon');
+            const heroPauseIcon = document.getElementById('heroPauseIcon');
+            
             if (!isPlaying) {
                 playCurrentTrack();
+                if (heroPlayIcon) heroPlayIcon.style.display = 'none';
+                if (heroPauseIcon) heroPauseIcon.style.display = 'block';
             } else {
                 pauseCurrentTrack();
+                if (heroPlayIcon) heroPlayIcon.style.display = 'block';
+                if (heroPauseIcon) heroPauseIcon.style.display = 'none';
             }
         }
 
@@ -381,23 +401,19 @@
         function playCurrentTrack() {
             audioPlayer.play().then(() => {
                 isPlaying = true;
-                heroPlayBtn.textContent = '⏸';
-                heroPlayBtn.classList.add('playing');
-                playIcon.style.display = 'none';
-                pauseIcon.style.display = 'block';
-                globalPlayer.classList.add('active');
-                updateAllPlayButtons();
-            }).catch(e => {
-                console.log('Playback failed:', e);
-                // Fallback for demo
+                updatePlayPauseButtons();
+                if (globalPlayer) globalPlayer.classList.add('active');
+                if (heroPlayBtn) heroPlayBtn.classList.add('playing');
+                updateAllTrackButtons();
+            }).catch(error => {
+                console.log('Audio play failed:', error);
+                // Fallback for demo mode
                 isPlaying = true;
-                heroPlayBtn.textContent = '⏸';
-                heroPlayBtn.classList.add('playing');
-                playIcon.style.display = 'none';
-                pauseIcon.style.display = 'block';
-                globalPlayer.classList.add('active');
-                updateAllPlayButtons();
+                updatePlayPauseButtons();
+                if (globalPlayer) globalPlayer.classList.add('active');
+                if (heroPlayBtn) heroPlayBtn.classList.add('playing');
                 simulateProgress();
+                updateAllTrackButtons();
             });
         }
 
@@ -405,11 +421,40 @@
         function pauseCurrentTrack() {
             audioPlayer.pause();
             isPlaying = false;
-            heroPlayBtn.textContent = '▶';
-            heroPlayBtn.classList.remove('playing');
-            playIcon.style.display = 'block';
-            pauseIcon.style.display = 'none';
-            updateAllPlayButtons();
+            updatePlayPauseButtons();
+            if (heroPlayBtn) heroPlayBtn.classList.remove('playing');
+            updateAllTrackButtons();
+        }
+
+        // Update play/pause button states
+        function updatePlayPauseButtons() {
+            const heroPlayIcon = document.getElementById('heroPlayIcon');
+            const heroPauseIcon = document.getElementById('heroPauseIcon');
+            
+            if (isPlaying) {
+                if (playIcon) playIcon.style.display = 'none';
+                if (pauseIcon) pauseIcon.style.display = 'block';
+                if (heroPlayIcon) heroPlayIcon.style.display = 'none';
+                if (heroPauseIcon) heroPauseIcon.style.display = 'block';
+            } else {
+                if (playIcon) playIcon.style.display = 'block';
+                if (pauseIcon) pauseIcon.style.display = 'none';
+                if (heroPlayIcon) heroPlayIcon.style.display = 'block';
+                if (heroPauseIcon) heroPauseIcon.style.display = 'none';
+            }
+        }
+
+        // Update all track play buttons
+        function updateAllTrackButtons() {
+            const trackPlayBtns = document.querySelectorAll('.track-play-btn');
+            trackPlayBtns.forEach((btn, index) => {
+                const trackId = trackKeys[index];
+                if (trackId === currentTrack && isPlaying) {
+                    btn.innerHTML = '⏸';
+                } else {
+                    btn.innerHTML = '▶';
+                }
+            });
         }
 
         // Play specific track
@@ -417,15 +462,24 @@
             const track = tracks[trackId];
             if (!track) return;
             
-            currentTrack = trackId;
-            audioPlayer.src = track.src;
-            playerTitle.textContent = track.title;
-            playerArtist.textContent = track.artist;
-            playerThumbnail.innerHTML = `<img src="${track.image}" alt="${track.title}" class="player-art">`;
-            heroTrackTitle.textContent = track.title;
+            // Stop current track if playing
+            if (isPlaying) {
+                pauseCurrentTrack();
+            }
             
-            globalPlayer.classList.add('active');
-            heroTrackInfo.classList.add('visible');
+            currentTrack = trackId;
+            currentTrackIndex = trackKeys.indexOf(trackId);
+            audioPlayer.src = track.src;
+            
+            if (playerTitle) playerTitle.textContent = track.title;
+            if (playerArtist) playerArtist.textContent = track.artist;
+            if (playerThumbnail) {
+                playerThumbnail.innerHTML = `<img src="${track.image}" alt="${track.title}" class="player-art">`;
+            }
+            if (heroTrackTitle) heroTrackTitle.textContent = track.title;
+            
+            if (globalPlayer) globalPlayer.classList.add('active');
+            if (heroTrackInfo) heroTrackInfo.classList.add('visible');
             
             playCurrentTrack();
         }
@@ -439,24 +493,6 @@
             }
         }
 
-        // Update all track play buttons
-        function updateAllPlayButtons() {
-            document.querySelectorAll('.track-play-btn').forEach(btn => {
-                const onclickAttr = btn.getAttribute('onclick');
-                if (onclickAttr) {
-                    const match = onclickAttr.match(/'([^']+)'/);
-                    if (match) {
-                        const trackId = match[1];
-                        if (trackId === currentTrack && isPlaying) {
-                            btn.textContent = '⏸';
-                        } else {
-                            btn.textContent = '▶';
-                        }
-                    }
-                }
-            });
-        }
-
         // Format time display
         function formatTime(seconds) {
             const mins = Math.floor(seconds / 60);
@@ -468,105 +504,111 @@
         function updateProgress() {
             if (audioPlayer.duration) {
                 const progress = (audioPlayer.currentTime / audioPlayer.duration) * 100;
-                progressFill.style.width = progress + '%';
-                currentTimeSpan.textContent = formatTime(audioPlayer.currentTime);
-                totalTimeSpan.textContent = formatTime(audioPlayer.duration);
+                if (progressFill) progressFill.style.width = progress + '%';
+                if (currentTimeSpan) currentTimeSpan.textContent = formatTime(audioPlayer.currentTime);
+                if (totalTimeSpan) totalTimeSpan.textContent = formatTime(audioPlayer.duration);
             }
         }
 
-        // Simulate progress for demo
+        // Simulate progress for demo (when audio files don't load)
         let demoProgress = 0;
         let demoInterval = null;
         
         function simulateProgress() {
             if (demoInterval) clearInterval(demoInterval);
             demoProgress = 0;
-            totalTimeSpan.textContent = '3:42';
+            if (totalTimeSpan) totalTimeSpan.textContent = '3:42';
             
             demoInterval = setInterval(() => {
                 if (isPlaying) {
                     demoProgress += 0.5;
                     const progress = (demoProgress / 222) * 100;
-                    progressFill.style.width = Math.min(progress, 100) + '%';
-                    currentTimeSpan.textContent = formatTime(demoProgress);
+                    if (progressFill) progressFill.style.width = Math.min(progress, 100) + '%';
+                    if (currentTimeSpan) currentTimeSpan.textContent = formatTime(demoProgress);
                     
                     if (demoProgress >= 222) {
                         clearInterval(demoInterval);
                         isPlaying = false;
-                        heroPlayBtn.textContent = '▶';
-                        heroPlayBtn.classList.remove('playing');
-                        playIcon.style.display = 'block';
-                        pauseIcon.style.display = 'none';
-                        updateAllPlayButtons();
+                        updatePlayPauseButtons();
+                        updateAllTrackButtons();
+                        if (heroPlayBtn) heroPlayBtn.classList.remove('playing');
                     }
                 }
             }, 500);
         }
 
         // Click to seek in progress bar
-        progressBar.addEventListener('click', (e) => {
-            if (audioPlayer.duration) {
+        if (progressBar) {
+            progressBar.addEventListener('click', (e) => {
                 const rect = progressBar.getBoundingClientRect();
                 const percent = (e.clientX - rect.left) / rect.width;
-                audioPlayer.currentTime = percent * audioPlayer.duration;
-            } else {
-                const rect = progressBar.getBoundingClientRect();
-                const percent = (e.clientX - rect.left) / rect.width;
-                demoProgress = percent * 222;
-                const progress = (demoProgress / 222) * 100;
-                progressFill.style.width = progress + '%';
-                currentTimeSpan.textContent = formatTime(demoProgress);
-            }
-        });
+                
+                if (audioPlayer.duration) {
+                    audioPlayer.currentTime = percent * audioPlayer.duration;
+                } else {
+                    // Demo mode
+                    demoProgress = percent * 222;
+                    const progress = (demoProgress / 222) * 100;
+                    if (progressFill) progressFill.style.width = progress + '%';
+                    if (currentTimeSpan) currentTimeSpan.textContent = formatTime(demoProgress);
+                }
+            });
+        }
 
         // Event listeners
-        playPauseBtn.addEventListener('click', togglePlayPause);
+        if (playPauseBtn) playPauseBtn.addEventListener('click', togglePlayPause);
+        
         audioPlayer.addEventListener('timeupdate', updateProgress);
         audioPlayer.addEventListener('loadedmetadata', updateProgress);
-
         audioPlayer.addEventListener('ended', () => {
             isPlaying = false;
-            heroPlayBtn.textContent = '▶';
-            heroPlayBtn.classList.remove('playing');
-            playIcon.style.display = 'block';
-            pauseIcon.style.display = 'none';
-            updateAllPlayButtons();
+            updatePlayPauseButtons();
+            updateAllTrackButtons();
+            if (heroPlayBtn) heroPlayBtn.classList.remove('playing');
         });
 
         // Previous track
-        document.getElementById('prevBtn').addEventListener('click', () => {
-            const trackIds = Object.keys(tracks);
-            const currentIndex = trackIds.indexOf(currentTrack);
-            const prevIndex = currentIndex > 0 ? currentIndex - 1 : trackIds.length - 1;
-            const prevTrack = tracks[trackIds[prevIndex]];
-            playTrack(trackIds[prevIndex], prevTrack.title, prevTrack.symbol);
-        });
+        const prevBtn = document.getElementById('prevBtn');
+        if (prevBtn) {
+            prevBtn.addEventListener('click', () => {
+                currentTrackIndex = currentTrackIndex > 0 ? currentTrackIndex - 1 : trackKeys.length - 1;
+                const prevTrackId = trackKeys[currentTrackIndex];
+                const prevTrack = tracks[prevTrackId];
+                playTrack(prevTrackId, prevTrack.title, prevTrack.symbol);
+            });
+        }
 
         // Next track
-        document.getElementById('nextBtn').addEventListener('click', () => {
-            const trackIds = Object.keys(tracks);
-            const currentIndex = trackIds.indexOf(currentTrack);
-            const nextIndex = currentIndex < trackIds.length - 1 ? currentIndex + 1 : 0;
-            const nextTrack = tracks[trackIds[nextIndex]];
-            playTrack(trackIds[nextIndex], nextTrack.title, nextTrack.symbol);
-        });
+        const nextBtn = document.getElementById('nextBtn');
+        if (nextBtn) {
+            nextBtn.addEventListener('click', () => {
+                currentTrackIndex = currentTrackIndex < trackKeys.length - 1 ? currentTrackIndex + 1 : 0;
+                const nextTrackId = trackKeys[currentTrackIndex];
+                const nextTrack = tracks[nextTrackId];
+                playTrack(nextTrackId, nextTrack.title, nextTrack.symbol);
+            });
+        }
 
         // Volume control
-        volumeBtn.addEventListener('click', () => {
-            audioPlayer.muted = !audioPlayer.muted;
-            if (audioPlayer.muted) {
-                volumeOnIcon.style.display = 'none';
-                volumeOffIcon.style.display = 'block';
-            } else {
-                volumeOnIcon.style.display = 'block';
-                volumeOffIcon.style.display = 'none';
-            }
-        });
+        if (volumeBtn) {
+            volumeBtn.addEventListener('click', () => {
+                audioPlayer.muted = !audioPlayer.muted;
+                if (audioPlayer.muted) {
+                    if (volumeOnIcon) volumeOnIcon.style.display = 'none';
+                    if (volumeOffIcon) volumeOffIcon.style.display = 'block';
+                } else {
+                    if (volumeOnIcon) volumeOnIcon.style.display = 'block';
+                    if (volumeOffIcon) volumeOffIcon.style.display = 'none';
+                }
+            });
+        }
 
         // Mobile menu toggle
         function toggleMenu() {
             const navLinks = document.getElementById('nav-links');
-            navLinks.classList.toggle('active');
+            if (navLinks) {
+                navLinks.classList.toggle('active');
+            }
         }
 
         // Smooth scrolling
@@ -579,6 +621,12 @@
                         behavior: 'smooth',
                         block: 'start'
                     });
+                    
+                    // Close mobile menu after clicking
+                    const navLinks = document.getElementById('nav-links');
+                    if (navLinks) {
+                        navLinks.classList.remove('active');
+                    }
                 }
             });
         });
@@ -604,10 +652,12 @@
         // Hide scroll indicator after scrolling
         window.addEventListener('scroll', () => {
             const scrollIndicator = document.querySelector('.scroll-indicator');
-            if (window.scrollY > 100) {
-                scrollIndicator.style.opacity = '0';
-            } else {
-                scrollIndicator.style.opacity = '1';
+            if (scrollIndicator) {
+                if (window.scrollY > 100) {
+                    scrollIndicator.style.opacity = '0';
+                } else {
+                    scrollIndicator.style.opacity = '1';
+                }
             }
         });
 
@@ -616,13 +666,87 @@
             const navLinks = document.getElementById('nav-links');
             const mobileMenu = document.querySelector('.mobile-menu');
             
-            if (!navLinks.contains(event.target) && !mobileMenu.contains(event.target)) {
+            if (navLinks && mobileMenu && 
+                !navLinks.contains(event.target) && 
+                !mobileMenu.contains(event.target)) {
                 navLinks.classList.remove('active');
             }
         });
 
+        // Keyboard controls for music player
+        document.addEventListener('keydown', function(e) {
+            if (e.target.tagName.toLowerCase() === 'input' || e.target.tagName.toLowerCase() === 'textarea') {
+                return; // Don't interfere with form inputs
+            }
+            
+            switch(e.key) {
+                case ' ': // Space bar for play/pause
+                    e.preventDefault();
+                    togglePlayPause();
+                    break;
+                case 'ArrowLeft': // Left arrow for previous track
+                    e.preventDefault();
+                    if (prevBtn) prevBtn.click();
+                    break;
+                case 'ArrowRight': // Right arrow for next track
+                    e.preventDefault();
+                    if (nextBtn) nextBtn.click();
+                    break;
+                case 'm': // M for mute/unmute
+                case 'M':
+                    e.preventDefault();
+                    if (volumeBtn) volumeBtn.click();
+                    break;
+            }
+        });
+
         // Initialize the player when page loads
-        document.addEventListener('DOMContentLoaded', initializePlayer);
+        document.addEventListener('DOMContentLoaded', function() {
+            initializePlayer();
+            
+            // Auto-show global player after a delay
+            setTimeout(() => {
+                if (globalPlayer) {
+                    globalPlayer.style.transform = 'translateY(0)';
+                }
+            }, 2000);
+        });
+
+        // Add click handlers to all track buttons
+        document.addEventListener('DOMContentLoaded', function() {
+            const trackButtons = document.querySelectorAll('.track-play-btn');
+            trackButtons.forEach((button, index) => {
+                const trackId = trackKeys[index];
+                if (trackId && tracks[trackId]) {
+                    button.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        
+                        if (currentTrack === trackId && isPlaying) {
+                            pauseCurrentTrack();
+                        } else {
+                            const track = tracks[trackId];
+                            playTrack(trackId, track.title, track.symbol);
+                        }
+                    });
+                }
+            });
+        });
+
+        // Handle audio loading errors gracefully
+        audioPlayer.addEventListener('error', function(e) {
+            console.log('Audio loading error:', e);
+            // Continue with demo mode
+        });
+
+        // Prevent video from pausing when audio plays
+        const heroVideo = document.getElementById('heroVideo');
+        if (heroVideo) {
+            audioPlayer.addEventListener('play', () => {
+                heroVideo.muted = true; // Keep video muted when audio plays
+            });
+        }
+
     </script>
 </body>
 </html>
