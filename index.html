@@ -367,6 +367,10 @@
         let isPlaying = false;
         let currentTrackIndex = 0;
         const trackKeys = Object.keys(tracks);
+        let demoProgress = 0;
+        let demoInterval = null;
+        let demoDuration = 222;
+        let isInitialized = false;
 
         // Initialize default track
         function initializePlayer() {
@@ -398,43 +402,43 @@
         }
 
         function playCurrentTrack() {
-        // Clear any existing demo interval
-        if (demoInterval) {
-            clearInterval(demoInterval);
-            demoInterval = null;
+            // Clear any existing demo interval first
+            clearDemoInterval();
+            
+            audioPlayer.play().then(() => {
+                isPlaying = true;
+                updatePlayPauseButtons();
+                if (globalPlayer) globalPlayer.classList.add('active');
+                if (heroPlayBtn) heroPlayBtn.classList.add('playing');
+                updateAllTrackButtons();
+            }).catch(error => {
+                console.log('Audio play failed, using demo mode:', error);
+                // Fallback for demo mode
+                isPlaying = true;
+                updatePlayPauseButtons();
+                if (globalPlayer) globalPlayer.classList.add('active');
+                if (heroPlayBtn) heroPlayBtn.classList.add('playing');
+                simulateProgress();
+                updateAllTrackButtons();
+            });
         }
-        
-        audioPlayer.play().then(() => {
-            isPlaying = true;
-            updatePlayPauseButtons();
-            if (globalPlayer) globalPlayer.classList.add('active');
-            if (heroPlayBtn) heroPlayBtn.classList.add('playing');
-            updateAllTrackButtons();
-        }).catch(error => {
-            console.log('Audio play failed:', error);
-            // Fallback for demo mode
-            isPlaying = true;
-            updatePlayPauseButtons();
-            if (globalPlayer) globalPlayer.classList.add('active');
-            if (heroPlayBtn) heroPlayBtn.classList.add('playing');
-            simulateProgress();
-            updateAllTrackButtons();
-        });
-    }
 
         function pauseCurrentTrack() {
-        // Clear demo interval when pausing
-        if (demoInterval) {
-            clearInterval(demoInterval);
-            demoInterval = null;
+            clearDemoInterval();
+            audioPlayer.pause();
+            isPlaying = false;
+            updatePlayPauseButtons();
+            if (heroPlayBtn) heroPlayBtn.classList.remove('playing');
+            updateAllTrackButtons();
         }
-         
-        audioPlayer.pause();
-        isPlaying = false;
-        updatePlayPauseButtons();
-        if (heroPlayBtn) heroPlayBtn.classList.remove('playing');
-        updateAllTrackButtons();
-}
+
+        function clearDemoInterval() {
+            if (demoInterval) {
+                clearInterval(demoInterval);
+                demoInterval = null;
+            }
+        }
+
         // Update play/pause button states
         function updatePlayPauseButtons() {
             const heroPlayIcon = document.getElementById('heroPlayIcon');
@@ -467,44 +471,45 @@
         }
 
         function playTrack(trackId, title, symbol) {
-        const track = tracks[trackId];
-        if (!track) return;
-        
-        // Stop current track if playing and clear any demo intervals
-        if (isPlaying) {
-            pauseCurrentTrack();
+            const track = tracks[trackId];
+            if (!track) return;
+            
+            // Stop current track if playing
+            if (isPlaying) {
+                pauseCurrentTrack();
+            }
+            
+            // Clear intervals and reset progress
+            clearDemoInterval();
+            resetProgress();
+            
+            currentTrack = trackId;
+            currentTrackIndex = trackKeys.indexOf(trackId);
+            audioPlayer.src = track.src;
+            
+            // Update player info
+            if (playerTitle) playerTitle.textContent = track.title;
+            if (playerArtist) playerArtist.textContent = track.artist;
+            if (playerThumbnail) {
+                playerThumbnail.innerHTML = `<img src="${track.image}" alt="${track.title}" class="player-art">`;
+            }
+            if (heroTrackTitle) heroTrackTitle.textContent = track.title;
+            
+            if (globalPlayer) globalPlayer.classList.add('active');
+            if (heroTrackInfo) heroTrackInfo.classList.add('visible');
+            
+            // Small delay to ensure clean state
+            setTimeout(() => {
+                playCurrentTrack();
+            }, 100);
         }
-        
-        // Clear any existing demo interval
-        if (demoInterval) {
-            clearInterval(demoInterval);
-            demoInterval = null;
-        }
-        
-        // Reset progress bar
-        demoProgress = 0;
-        if (progressFill) progressFill.style.width = '0%';
-        if (currentTimeSpan) currentTimeSpan.textContent = '0:00';
-        if (totalTimeSpan) totalTimeSpan.textContent = '0:00';
-        
-        currentTrack = trackId;
-        currentTrackIndex = trackKeys.indexOf(trackId);
-        audioPlayer.src = track.src;
-        
-        if (playerTitle) playerTitle.textContent = track.title;
-        if (playerArtist) playerArtist.textContent = track.artist;
-        if (playerThumbnail) {
-            playerThumbnail.innerHTML = `<img src="${track.image}" alt="${track.title}" class="player-art">`;
-        }
-        if (heroTrackTitle) heroTrackTitle.textContent = track.title;
-        
-        if (globalPlayer) globalPlayer.classList.add('active');
-        if (heroTrackInfo) heroTrackInfo.classList.add('visible');
-        
-        playCurrentTrack();
-    }
 
-
+        function resetProgress() {
+            demoProgress = 0;
+            if (progressFill) progressFill.style.width = '0%';
+            if (currentTimeSpan) currentTimeSpan.textContent = '0:00';
+            if (totalTimeSpan) totalTimeSpan.textContent = '0:00';
+        }
 
         // Play/Pause toggle for global player
         function togglePlayPause() {
@@ -522,9 +527,9 @@
             return `${mins}:${secs.toString().padStart(2, '0')}`;
         }
 
-        // Update progress bar
+        // Update progress bar for real audio
         function updateProgress() {
-            if (audioPlayer.duration) {
+            if (audioPlayer.duration && !isNaN(audioPlayer.duration)) {
                 const progress = (audioPlayer.currentTime / audioPlayer.duration) * 100;
                 if (progressFill) progressFill.style.width = progress + '%';
                 if (currentTimeSpan) currentTimeSpan.textContent = formatTime(audioPlayer.currentTime);
@@ -532,34 +537,26 @@
             }
         }
 
-        let demoProgress = 0;
-        let demoInterval = null;
-        let demoDuration = 222; // 3:42 in seconds
-
         function simulateProgress() {
-            // Clear any existing interval
-            if (demoInterval) {
-                clearInterval(demoInterval);
-                demoInterval = null;
-            }
+            clearDemoInterval();
             
-            // Reset progress
+            // Reset and set random duration
             demoProgress = 0;
-            demoDuration = Math.floor(Math.random() * 120) + 180; // Random duration between 3-5 minutes
+            demoDuration = Math.floor(Math.random() * 120) + 180; // 3-5 minutes
+            
             if (totalTimeSpan) totalTimeSpan.textContent = formatTime(demoDuration);
             if (currentTimeSpan) currentTimeSpan.textContent = '0:00';
             if (progressFill) progressFill.style.width = '0%';
             
             demoInterval = setInterval(() => {
                 if (isPlaying) {
-                    demoProgress += 1; // Increment by 1 second
+                    demoProgress += 1;
                     const progress = (demoProgress / demoDuration) * 100;
                     if (progressFill) progressFill.style.width = Math.min(progress, 100) + '%';
                     if (currentTimeSpan) currentTimeSpan.textContent = formatTime(demoProgress);
                     
                     if (demoProgress >= demoDuration) {
-                        clearInterval(demoInterval);
-                        demoInterval = null;
+                        clearDemoInterval();
                         isPlaying = false;
                         updatePlayPauseButtons();
                         updateAllTrackButtons();
@@ -572,83 +569,7 @@
                         }, 1000);
                     }
                 }
-            }, 1000); // Update every second for more realistic timing
-        }
-
-        // Click to seek in progress bar
-        progressBar.addEventListener('click', (e) => {
-        const rect = progressBar.getBoundingClientRect();
-        const percent = (e.clientX - rect.left) / rect.width;
-        
-        if (audioPlayer.duration && !isNaN(audioPlayer.duration)) {
-            audioPlayer.currentTime = percent * audioPlayer.duration;
-        } else {
-            // Demo mode - seek in simulated progress
-            demoProgress = percent * demoDuration;
-            const progress = (demoProgress / demoDuration) * 100;
-            if (progressFill) progressFill.style.width = progress + '%';
-            if (currentTimeSpan) currentTimeSpan.textContent = formatTime(demoProgress);
-        }
-    });
-
-        // Event listeners
-        if (playPauseBtn) playPauseBtn.addEventListener('click', togglePlayPause);
-        
-        audioPlayer.addEventListener('timeupdate', updateProgress);
-        audioPlayer.addEventListener('loadedmetadata', updateProgress);
-        audioPlayer.addEventListener('ended', () => {
-        // Clear demo interval on track end
-        if (demoInterval) {
-            clearInterval(demoInterval);
-            demoInterval = null;
-        }
-        
-        isPlaying = false;
-        updatePlayPauseButtons();
-        updateAllTrackButtons();
-        if (heroPlayBtn) heroPlayBtn.classList.remove('playing');
-        
-        // Auto-play next track
-        setTimeout(() => {
-            const nextBtn = document.getElementById('nextBtn');
-            if (nextBtn) nextBtn.click();
-        }, 1000);
-    });
-
-        // Previous track
-        const prevBtn = document.getElementById('prevBtn');
-        if (prevBtn) {
-            prevBtn.addEventListener('click', () => {
-                currentTrackIndex = currentTrackIndex > 0 ? currentTrackIndex - 1 : trackKeys.length - 1;
-                const prevTrackId = trackKeys[currentTrackIndex];
-                const prevTrack = tracks[prevTrackId];
-                playTrack(prevTrackId, prevTrack.title, prevTrack.symbol);
-            });
-        }
-
-        // Next track
-        const nextBtn = document.getElementById('nextBtn');
-        if (nextBtn) {
-            nextBtn.addEventListener('click', () => {
-                currentTrackIndex = currentTrackIndex < trackKeys.length - 1 ? currentTrackIndex + 1 : 0;
-                const nextTrackId = trackKeys[currentTrackIndex];
-                const nextTrack = tracks[nextTrackId];
-                playTrack(nextTrackId, nextTrack.title, nextTrack.symbol);
-            });
-        }
-
-        // Volume control
-        if (volumeBtn) {
-            volumeBtn.addEventListener('click', () => {
-                audioPlayer.muted = !audioPlayer.muted;
-                if (audioPlayer.muted) {
-                    if (volumeOnIcon) volumeOnIcon.style.display = 'none';
-                    if (volumeOffIcon) volumeOffIcon.style.display = 'block';
-                } else {
-                    if (volumeOnIcon) volumeOnIcon.style.display = 'block';
-                    if (volumeOffIcon) volumeOffIcon.style.display = 'none';
-                }
-            });
+            }, 1000);
         }
 
         // Mobile menu toggle
@@ -659,7 +580,113 @@
             }
         }
 
-        // Smooth scrolling
+        // Initialize everything when DOM is ready
+        document.addEventListener('DOMContentLoaded', function() {
+            if (isInitialized) return;
+            isInitialized = true;
+            
+            initializePlayer();
+            
+            // Event listeners - only add once
+            if (playPauseBtn) playPauseBtn.addEventListener('click', togglePlayPause);
+            
+            // Progress bar click handler
+            if (progressBar) {
+                progressBar.addEventListener('click', (e) => {
+                    const rect = progressBar.getBoundingClientRect();
+                    const percent = (e.clientX - rect.left) / rect.width;
+                    
+                    if (audioPlayer.duration && !isNaN(audioPlayer.duration)) {
+                        audioPlayer.currentTime = percent * audioPlayer.duration;
+                    } else {
+                        // Demo mode seeking
+                        demoProgress = percent * demoDuration;
+                        const progress = (demoProgress / demoDuration) * 100;
+                        if (progressFill) progressFill.style.width = progress + '%';
+                        if (currentTimeSpan) currentTimeSpan.textContent = formatTime(demoProgress);
+                    }
+                });
+            }
+
+            // Audio event listeners
+            audioPlayer.addEventListener('timeupdate', updateProgress);
+            audioPlayer.addEventListener('loadedmetadata', updateProgress);
+            audioPlayer.addEventListener('ended', () => {
+                clearDemoInterval();
+                isPlaying = false;
+                updatePlayPauseButtons();
+                updateAllTrackButtons();
+                if (heroPlayBtn) heroPlayBtn.classList.remove('playing');
+                
+                setTimeout(() => {
+                    const nextBtn = document.getElementById('nextBtn');
+                    if (nextBtn) nextBtn.click();
+                }, 1000);
+            });
+
+            // Track navigation
+            const prevBtn = document.getElementById('prevBtn');
+            if (prevBtn) {
+                prevBtn.addEventListener('click', () => {
+                    currentTrackIndex = currentTrackIndex > 0 ? currentTrackIndex - 1 : trackKeys.length - 1;
+                    const prevTrackId = trackKeys[currentTrackIndex];
+                    const prevTrack = tracks[prevTrackId];
+                    playTrack(prevTrackId, prevTrack.title, prevTrack.symbol);
+                });
+            }
+
+            const nextBtn = document.getElementById('nextBtn');
+            if (nextBtn) {
+                nextBtn.addEventListener('click', () => {
+                    currentTrackIndex = currentTrackIndex < trackKeys.length - 1 ? currentTrackIndex + 1 : 0;
+                    const nextTrackId = trackKeys[currentTrackIndex];
+                    const nextTrack = tracks[nextTrackId];
+                    playTrack(nextTrackId, nextTrack.title, nextTrack.symbol);
+                });
+            }
+
+            // Volume control
+            if (volumeBtn) {
+                volumeBtn.addEventListener('click', () => {
+                    audioPlayer.muted = !audioPlayer.muted;
+                    if (audioPlayer.muted) {
+                        if (volumeOnIcon) volumeOnIcon.style.display = 'none';
+                        if (volumeOffIcon) volumeOffIcon.style.display = 'block';
+                    } else {
+                        if (volumeOnIcon) volumeOnIcon.style.display = 'block';
+                        if (volumeOffIcon) volumeOffIcon.style.display = 'none';
+                    }
+                });
+            }
+
+            // Track buttons
+            const trackButtons = document.querySelectorAll('.track-play-btn');
+            trackButtons.forEach((button, index) => {
+                const trackId = trackKeys[index];
+                if (trackId && tracks[trackId]) {
+                    button.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        
+                        if (currentTrack === trackId && isPlaying) {
+                            pauseCurrentTrack();
+                        } else {
+                            const track = tracks[trackId];
+                            playTrack(trackId, track.title, track.symbol);
+                        }
+                    });
+                }
+            });
+
+            // Auto-show global player
+            setTimeout(() => {
+                if (globalPlayer) {
+                    globalPlayer.style.transform = 'translateY(0)';
+                }
+            }, 2000);
+        });
+
+        // Smooth scrolling for navigation
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
                 e.preventDefault();
@@ -670,7 +697,6 @@
                         block: 'start'
                     });
                     
-                    // Close mobile menu after clicking
                     const navLinks = document.getElementById('nav-links');
                     if (navLinks) {
                         navLinks.classList.remove('active');
@@ -679,7 +705,7 @@
             });
         });
 
-        // Fade in animation on scroll
+        // Intersection Observer for animations
         const observerOptions = {
             threshold: 0.1,
             rootMargin: '0px 0px -50px 0px'
@@ -697,7 +723,7 @@
             observer.observe(el);
         });
 
-        // Hide scroll indicator after scrolling
+        // Scroll indicator
         window.addEventListener('scroll', () => {
             const scrollIndicator = document.querySelector('.scroll-indicator');
             if (scrollIndicator) {
@@ -721,26 +747,28 @@
             }
         });
 
-        // Keyboard controls for music player
+        // Keyboard controls
         document.addEventListener('keydown', function(e) {
             if (e.target.tagName.toLowerCase() === 'input' || e.target.tagName.toLowerCase() === 'textarea') {
-                return; // Don't interfere with form inputs
+                return;
             }
             
             switch(e.key) {
-                case ' ': // Space bar for play/pause
+                case ' ':
                     e.preventDefault();
                     togglePlayPause();
                     break;
-                case 'ArrowLeft': // Left arrow for previous track
+                case 'ArrowLeft':
                     e.preventDefault();
+                    const prevBtn = document.getElementById('prevBtn');
                     if (prevBtn) prevBtn.click();
                     break;
-                case 'ArrowRight': // Right arrow for next track
+                case 'ArrowRight':
                     e.preventDefault();
+                    const nextBtn = document.getElementById('nextBtn');
                     if (nextBtn) nextBtn.click();
                     break;
-                case 'm': // M for mute/unmute
+                case 'm':
                 case 'M':
                     e.preventDefault();
                     if (volumeBtn) volumeBtn.click();
@@ -748,53 +776,18 @@
             }
         });
 
-        // Initialize the player when page loads
-        document.addEventListener('DOMContentLoaded', function() {
-            initializePlayer();
-            
-            // Auto-show global player after a delay
-            setTimeout(() => {
-                if (globalPlayer) {
-                    globalPlayer.style.transform = 'translateY(0)';
-                }
-            }, 2000);
-        });
-
-        // Add click handlers to all track buttons
-        document.addEventListener('DOMContentLoaded', function() {
-            const trackButtons = document.querySelectorAll('.track-play-btn');
-            trackButtons.forEach((button, index) => {
-                const trackId = trackKeys[index];
-                if (trackId && tracks[trackId]) {
-                    button.addEventListener('click', function(e) {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        
-                        if (currentTrack === trackId && isPlaying) {
-                            pauseCurrentTrack();
-                        } else {
-                            const track = tracks[trackId];
-                            playTrack(trackId, track.title, track.symbol);
-                        }
-                    });
-                }
-            });
-        });
-
-        // Handle audio loading errors gracefully
+        // Error handling
         audioPlayer.addEventListener('error', function(e) {
-            console.log('Audio loading error:', e);
-            // Continue with demo mode
+            console.log('Audio loading error, continuing with demo mode:', e);
         });
 
-        // Prevent video from pausing when audio plays
+        // Video/audio coordination
         const heroVideo = document.getElementById('heroVideo');
         if (heroVideo) {
             audioPlayer.addEventListener('play', () => {
-                heroVideo.muted = true; // Keep video muted when audio plays
+                heroVideo.muted = true;
             });
         }
-
     </script>
 </body>
 </html>
