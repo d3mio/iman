@@ -9,15 +9,7 @@
 
 <body>
     <!-- Audio element for music playback -->
-    <audio id="audioPlayer" 
-        preload="metadata" 
-        playsinline 
-        webkit-playsinline 
-        x-webkit-airplay="deny" 
-        x5-playsinline 
-        controlslist="nodownload nofullscreen noremoteplayback">
-    </audio>
-
+    <audio id="audioPlayer" preload="metadata"></audio>
 
     <nav>
         <div class="nav-container">
@@ -39,8 +31,9 @@
     </nav>
 
     <section id="home" class="hero">
-        <video autoplay muted loop id="heroVideo" class="hero-background-video" playsinline webkit-playsinline x-webkit-airplay="deny" x5-playsinline>
+        <video autoplay muted loop id="heroVideo" class="hero-background-video">
             <source src="images/Vids/backvid.mp4" type="video/mp4">
+            Your browser does not support the video tag.
         </video>
 
         <div class="hero-content">
@@ -48,15 +41,8 @@
             <p>Singer • Artist • Performer</p>
             <div class="hero-play-container">
                 <button class="hero-play-btn" id="heroPlayBtn" onclick="toggleHeroPlayback()">
-                    <svg viewBox="0 0 24 24" id="heroPlayIcon">
-                        <path d="M8 5v14l11-7z"/>
-                    </svg>
-                    <svg viewBox="0 0 24 24" id="heroPauseIcon" style="display: none;">
-                        <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>
-                    </svg>
+                    ▶
                 </button>
-
-
                 <div class="hero-track-info" id="heroTrackInfo">
                     <div class="hero-track-title" id="heroTrackTitle">Midnight Dreams</div>
                     <div class="hero-track-artist">Iman Fernando</div>
@@ -310,11 +296,7 @@
 
     <script>
         // Music Player Elements
-
-        // iOS / Safari: prevent AirPlay or remote playback
-        audioPlayer.setAttribute("x-webkit-airplay", "deny");
-        audioPlayer.setAttribute("controlsList", "noremoteplayback");
-        audioPlayer.disableRemotePlayback = true;
+        const audioPlayer = document.getElementById('audioPlayer');
         const globalPlayer = document.getElementById('globalPlayer');
         const playPauseBtn = document.getElementById('playPauseBtn');
         const playIcon = document.getElementById('playIcon');
@@ -399,8 +381,7 @@
         function playCurrentTrack() {
             audioPlayer.play().then(() => {
                 isPlaying = true;
-                heroPlayIcon.style.display = 'none';
-                heroPauseIcon.style.display = 'block';
+                heroPlayBtn.textContent = '⏸';
                 heroPlayBtn.classList.add('playing');
                 playIcon.style.display = 'none';
                 pauseIcon.style.display = 'block';
@@ -408,9 +389,9 @@
                 updateAllPlayButtons();
             }).catch(e => {
                 console.log('Playback failed:', e);
+                // Fallback for demo
                 isPlaying = true;
-                heroPlayIcon.style.display = 'none';
-                heroPauseIcon.style.display = 'block';
+                heroPlayBtn.textContent = '⏸';
                 heroPlayBtn.classList.add('playing');
                 playIcon.style.display = 'none';
                 pauseIcon.style.display = 'block';
@@ -424,14 +405,12 @@
         function pauseCurrentTrack() {
             audioPlayer.pause();
             isPlaying = false;
-            heroPlayIcon.style.display = 'block';
-            heroPauseIcon.style.display = 'none';
+            heroPlayBtn.textContent = '▶';
             heroPlayBtn.classList.remove('playing');
             playIcon.style.display = 'block';
             pauseIcon.style.display = 'none';
             updateAllPlayButtons();
         }
-
 
         // Play specific track
         function playTrack(trackId, title, symbol) {
