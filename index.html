@@ -89,7 +89,14 @@
                 <div class="track fade-in">
                     <div class="track-image">
                         <img src="images/album_arts/Hathpethi_Mal.jpg" alt="Hathpethi Mal" class="album-art">
-                        <button class="track-play-btn" onclick="playTrack('Hathpethi_Mal', 'Hathpethi Mal', '♪')">▶</button>
+                        <button class="track-play-btn" onclick="playTrack('Hathpethi_Mal', 'Hathpethi Mal', '♪')">
+                            <svg viewBox="0 0 24 24" class="track-play-icon">
+                                <path d="M8 5v14l11-7z"/>
+                            </svg>
+                            <svg viewBox="0 0 24 24" class="track-pause-icon" style="display: none;">
+                                <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>
+                            </svg>
+                        </button>
                     </div>
                     <div class="track-info">
                         <h3 class="track-title">Hathpethi Mal <br>(හත්පෙති මල්)</h3>
@@ -105,7 +112,14 @@
                 <div class="track fade-in">
                     <div class="track-image">
                         <img src="images/album_arts/Paalu_Yaame.jpeg" alt="Paalu Yaame" class="album-art">
-                        <button class="track-play-btn" onclick="playTrack('Paalu_Yaame', 'Paalu Yaame', '☀')">▶</button>
+                        <button class="track-play-btn" onclick="playTrack('Paalu_Yaame', 'Paalu Yaame', '☀')">
+                            <svg viewBox="0 0 24 24" class="track-play-icon">
+                                <path d="M8 5v14l11-7z"/>
+                            </svg>
+                            <svg viewBox="0 0 24 24" class="track-pause-icon" style="display: none;">
+                                <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>
+                            </svg>
+                        </button>
                     </div>
                     <div class="track-info">
                         <h3 class="track-title">Paalu Yaame <br> (මා සොඳුරිය​)</h3>
@@ -121,7 +135,14 @@
                 <div class="track fade-in">
                     <div class="track-image">
                         <img src="images/album_arts/Hangannada_Adare.jpeg" alt="Hangannada Adare" class="album-art">
-                        <button class="track-play-btn" onclick="playTrack('Hangannada_Adare', 'Hangannada Adare', '∿')">▶</button>
+                        <button class="track-play-btn" onclick="playTrack('Hangannada_Adare', 'Hangannada Adare', '∿')">
+                            <svg viewBox="0 0 24 24" class="track-play-icon">
+                                <path d="M8 5v14l11-7z"/>
+                            </svg>
+                            <svg viewBox="0 0 24 24" class="track-pause-icon" style="display: none;">
+                                <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>
+                            </svg>
+                        </button>
                     </div>
                     <div class="track-info">
                         <h3 class="track-title">Hangannada Adare <br>(හංගන්නද ආදරේ)</h3>
@@ -137,7 +158,14 @@
                 <div class="track fade-in">
                     <div class="track-image">
                         <img src="images/album_arts/Ralu_Nethu.jpg" alt="Ralu Nethu" class="album-art">
-                        <button class="track-play-btn" onclick="playTrack('Ralu_Nethu', 'Ralu Nethu', '◆')">▶</button>
+                        <button class="track-play-btn" onclick="playTrack('Ralu_Nethu', 'Ralu Nethu', '◆')">
+                            <svg viewBox="0 0 24 24" class="track-play-icon">
+                                <path d="M8 5v14l11-7z"/>
+                            </svg>
+                            <svg viewBox="0 0 24 24" class="track-pause-icon" style="display: none;">
+                                <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>
+                            </svg>
+                        </button>
                     </div>
                     <div class="track-info">
                         <h3 class="track-title">Ralu Nethu <br>(රළු නෙතු)</h3>
@@ -160,7 +188,14 @@
                 <div class="track fade-in">
                     <div class="track-image">
                         <img src="images/album_arts/Charikawak.jpg" alt="Charikawak" class="album-art">
-                        <button class="track-play-btn" onclick="playTrack('Chaarikawak', 'Charikawak', '◦')">▶</button>
+                        <button class="track-play-btn" onclick="playTrack('Chaarikawak', 'Charikawak', '◦')">
+                            <svg viewBox="0 0 24 24" class="track-play-icon">
+                                <path d="M8 5v14l11-7z"/>
+                            </svg>
+                            <svg viewBox="0 0 24 24" class="track-pause-icon" style="display: none;">
+                                <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>
+                            </svg>
+                        </button>
                     </div>
                     <div class="track-info">
                         <h3 class="track-title">Charikawak <br>(චාරිකාවක්)</h3>
@@ -457,15 +492,25 @@
             }
         }
 
-        // Update all track play buttons
         function updateAllTrackButtons() {
             const trackPlayBtns = document.querySelectorAll('.track-play-btn');
-            trackPlayBtns.forEach((btn, index) => {
-                const trackId = trackKeys[index];
+            trackPlayBtns.forEach((btn) => {
+                // Get the track ID from the button's onclick attribute
+                const onclickAttr = btn.getAttribute('onclick');
+                const trackIdMatch = onclickAttr.match(/playTrack\('([^']+)'/);
+                const trackId = trackIdMatch ? trackIdMatch[1] : null;
+                
+                const playIcon = btn.querySelector('.track-play-icon');
+                const pauseIcon = btn.querySelector('.track-pause-icon');
+                
                 if (trackId === currentTrack && isPlaying) {
-                    btn.innerHTML = '⏸';
+                    if (playIcon) playIcon.style.display = 'none';
+                    if (pauseIcon) pauseIcon.style.display = 'block';
+                    btn.classList.add('playing');
                 } else {
-                    btn.innerHTML = '▶';
+                    if (playIcon) playIcon.style.display = 'block';
+                    if (pauseIcon) pauseIcon.style.display = 'none';
+                    btn.classList.remove('playing');
                 }
             });
         }
@@ -473,6 +518,12 @@
         function playTrack(trackId, title, symbol) {
             const track = tracks[trackId];
             if (!track) return;
+            
+            // If clicking on the currently playing track, toggle play/pause
+            if (currentTrack === trackId && isPlaying) {
+                pauseCurrentTrack();
+                return;
+            }
             
             // Stop current track if playing
             if (isPlaying) {
@@ -502,6 +553,24 @@
             setTimeout(() => {
                 playCurrentTrack();
             }, 100);
+        }
+
+        function toggleTrackPlayback(trackId, title, symbol) {
+            const track = tracks[trackId];
+            if (!track) return;
+            
+            // If clicking on the currently playing track, toggle play/pause
+            if (currentTrack === trackId) {
+                if (isPlaying) {
+                    pauseCurrentTrack();
+                } else {
+                    playCurrentTrack();
+                }
+                return;
+            }
+            
+            // Otherwise, play the new track
+            playTrack(trackId, title, symbol);
         }
 
         function resetProgress() {
@@ -659,23 +728,13 @@
                 });
             }
 
-            // Track buttons
+            // Track buttons - onclick handlers will manage play/pause
             const trackButtons = document.querySelectorAll('.track-play-btn');
-            trackButtons.forEach((button, index) => {
-                const trackId = trackKeys[index];
-                if (trackId && tracks[trackId]) {
-                    button.addEventListener('click', function(e) {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        
-                        if (currentTrack === trackId && isPlaying) {
-                            pauseCurrentTrack();
-                        } else {
-                            const track = tracks[trackId];
-                            playTrack(trackId, track.title, track.symbol);
-                        }
-                    });
-                }
+            trackButtons.forEach((button) => {
+                button.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                });
             });
 
             // Auto-show global player
