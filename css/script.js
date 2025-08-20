@@ -56,7 +56,7 @@
                 image: 'images/album_arts/Apekathawa.jpg'
             },
             'Aley_Ma': {
-                src: 'music/Aley_Ma.mp3',
+                src: 'music/Aley_ma.mp3',
                 title: 'Aley Ma',
                 artist: 'Iman Fernando',
                 symbol: '◊',
