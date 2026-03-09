@@ -62,6 +62,13 @@
                 symbol: '◊',
                 image: 'images/album_arts/Aley_ma.jpg'
             },
+            'Hamuwuwado': {
+                src: 'music/Hamuwuwado.mp3',
+                title: 'Hamuwuwado',
+                artist: 'Iman Fernando',
+                symbol: '☀',
+                image: 'images/album_arts/Hamuwuwado.jpg'
+            },
             'Chaarikawak': {
                 src: 'music/Charikawak.mp3',
                 title: 'Charikawak',
